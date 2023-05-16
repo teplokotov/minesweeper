@@ -45,11 +45,11 @@
   grid-template-areas:
     "settings gamefield"
     "score score";
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 30% 70%;
   min-height: calc(100vh - 140px);
 }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .main {
     grid-template-areas:
       "settings"
@@ -258,11 +258,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: calc(100% - 76.4px);
+  padding: 15px 0 15px 0;
 }
 
 .field {
-  max-width: 150px;
+  max-width: 120px;
   display: flex;
   flex-wrap: wrap;
   padding: 10px;
@@ -271,13 +272,35 @@
 }
 
 .pin {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background-color: var(--color-secondary);
   box-shadow: inset 0 2px 0 0 var(--color-primary),
               inset 2px 0 0 0 var(--color-primary),
               inset 0 -2px 0 0 var(--color-accent),
               inset -2px 0 0 0 var(--color-accent);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+}
+
+.pin:hover {
+  background-color: var(--color-primary);
+}
+
+.pin__opened {
+  background: var(--color-secondary);
+  box-shadow: inset 0 1px 0 0 var(--color-secondary),
+              inset 1px 0 0 0 var(--color-secondary),
+              inset 0 -1px 0 0 var(--color-secondary),
+              inset -1px 0 0 0 var(--color-secondary);
+  cursor: default;
+}
+
+.pin__opened:hover {
+  background: var(--color-secondary);
 }
 
 .footer {
