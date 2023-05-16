@@ -1,7 +1,10 @@
 // Styles
 // import '../pages/index.css';
 
-const body = document.querySelector('.body');
+import { drawPage, body } from "../components/page.js";
+
+drawPage();
+
 const theme = document.querySelectorAll('.form__theme');
 
 theme.forEach(radio => {

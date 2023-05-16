@@ -32,7 +32,7 @@
 }
 
 /* Header */
-.header_heading {
+.header__heading {
   margin: 0;
   padding: 25px 15px;
   text-align: center;
@@ -167,6 +167,7 @@
 .form__label {
   cursor: pointer;
   color: var(--font-color);
+  padding-left: 5px;
 }
 
 .dashboard {
