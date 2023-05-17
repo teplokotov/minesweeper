@@ -214,7 +214,7 @@ export const drawPage = () => {
   radioLight.id = 'themeLight';
   radioLight.type = 'radio';
   radioLight.name = 'theme';
-  radioLight.value = 'ligth';
+  radioLight.value = 'light';
   radioLight.checked = true;
   fieldsetThemeSpanFirst.prepend(radioLight);
 
