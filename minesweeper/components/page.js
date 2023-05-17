@@ -81,7 +81,7 @@ export const drawPage = () => {
 
   // heading 'Field size' > span
   const fieldSizeHeadingSpan = document.createElement('span');
-  fieldSizeHeadingSpan.className = 'form__heading_thin';
+  fieldSizeHeadingSpan.className = 'form__heading_thin field-size';
   fieldSizeHeadingSpan.textContent = '10x10';
   fieldSizeHeading.append(fieldSizeHeadingSpan);
 
@@ -165,8 +165,8 @@ export const drawPage = () => {
 
   // rangeHeading > span
   const rangeHeadingSpan = document.createElement('span');
-  rangeHeadingSpan.className = 'form__heading_thin';
-  rangeHeadingSpan.textContent = '99';
+  rangeHeadingSpan.className = 'form__heading_thin mines';
+  rangeHeadingSpan.textContent = '10';
   rangeHeading.append(rangeHeadingSpan);
 
   // form 'formSettings' > span 'form__slider-wrapper'
@@ -328,7 +328,7 @@ export const drawPage = () => {
   // Section 'right-side' > div 'dashboard__score' > p
   const score = document.createElement('p');
   score.className = 'score_view';
-  score.textContent = '000';
+  score.textContent = '0';
   scoreHeading.after(score);
 
   // Section 'right-side' > div 'dashboard__time'
@@ -345,7 +345,7 @@ export const drawPage = () => {
   // Section 'right-side' > div 'dashboard__time' > p
   const time = document.createElement('p');
   time.className = 'time_view';
-  time.textContent = '000';
+  time.textContent = '0';
   timeHeading.after(time);
 
   // Section 'right-side' > section 'field-wrapper'
