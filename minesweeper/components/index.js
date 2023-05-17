@@ -58,7 +58,8 @@ let config = {
   isMinesSetted: false,
 };
 
-const mines = [];
+let mines = [];
+let numbers = [];
 
 getConfig();
 applyConfig();
@@ -148,6 +149,8 @@ function applyConfig() {
 }
 
 function removeField() {
+  mines = [];
+  numbers = [];
   field.textContent = '';
   config.isMinesSetted = false;
   saveConfig();
@@ -188,7 +191,7 @@ field.addEventListener('click', (evt) => {
       saveConfig();
     }
     // Check: is it mine?
-    console.log(clickedCoordinates);
+    //console.log(clickedCoordinates);
     if (mines.includes(clickedCoordinates)) console.log(clickedCoordinates + ' - Mine!');
 
   }
@@ -196,20 +199,45 @@ field.addEventListener('click', (evt) => {
 
 function setMines(clickedIndex) {
 
+  const pins = levelsParam[config.level].pins;
   const numOfmines = Number(config.mines);
   const randomIndexes = new Set();
   while(randomIndexes.size !== numOfmines) {
-    const randomIndex = Math.floor(Math.random() * 100) + 1;
+    const randomIndex = Math.floor(Math.random() * Math.pow(pins, 2));
     if (clickedIndex !== randomIndex) randomIndexes.add(randomIndex);
   }
   console.log(randomIndexes);
 
   let x = 0;
   let y = 0;
-  const pins = levelsParam[config.level].pins;
+
   for (let i = 0; i < Math.pow(pins, 2); i++) {
 
-    if (Array.from(randomIndexes).includes(i)) mines.push(`${x},${y}`);
+    if (Array.from(randomIndexes).includes(i)) {
+      mines.push(`${x},${y}`);
+      const pin = document.querySelector(`[data-pin="${x},${y}"]`);
+      pin.textContent = '🔥';
+
+      //  x - 1	| x     | x + 1
+      //  y - 1	| y - 1 | y - 1
+      // -----------------------
+      //  x - 1 |   x   | x + 1
+      //  y     |   y   | y
+      // -----------------------
+      //  x - 1	| x     | x + 1
+      //  y + 1	| y + 1 | y + 1
+
+      if (x > 0 && y > 0) numbers.push(`${x - 1},${y - 1}`);
+      if (y > 0) numbers.push(`${x},${y - 1}`);
+      if (y > 0 && x < pins - 1) numbers.push(`${x + 1},${y - 1}`);
+
+      if (x > 0) numbers.push(`${x - 1},${y}`);
+      if (x < pins - 1) numbers.push(`${x + 1},${y}`);
+
+      if (x > 0 && y < pins - 1) numbers.push(`${x - 1},${y + 1}`);
+      if (y < pins - 1) numbers.push(`${x},${y + 1}`);
+      if (x < pins - 1 && y < pins - 1) numbers.push(`${x + 1},${y + 1}`);
+    }
 
     x++;
     if (x >= pins) {
@@ -217,6 +245,20 @@ function setMines(clickedIndex) {
       y++;
     }
   }
-  console.log(mines);
+  //console.log(numbers);
+  numbers.forEach(num => {
+     const [ x, y ] = num.split(',');
+      //console.log('x: ' + x + ' y: ' + y );
+    if(!mines.includes(`${x},${y}`)) {
+      const pin = document.querySelector(`[data-pin="${x},${y}"]`);
+      let counter = pin.getAttribute('data-num');
+      if (!counter) counter = 0;
+      pin.setAttribute('data-num', Number(counter) + 1);
+      pin.textContent = Number(pin.textContent) + 1;
+     }
+  //   // let dataNum = parseInt(tile.getAttribute('data-num'));
+  //   // if (!dataNum) dataNum = 0;
+  //   // pin.setAttribute('data-num', dataNum + 1);
+	});
 }
 
