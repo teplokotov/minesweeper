@@ -276,7 +276,6 @@
 }
 
 .field {
-  max-width: 120px;
   display: flex;
   flex-wrap: wrap;
   padding: 10px;

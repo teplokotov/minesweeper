@@ -21,14 +21,33 @@ const name = document.querySelector('#userName');
 const clicks = document.querySelector('.score_view');
 // Time
 const time = document.querySelector('.time_view');
+// Field
+const field = document.querySelector('.field');
+// Button 'New Game'
+const btnSet = document.querySelector('.btn-set');
 
+const levelsParam = {
+  easy: {
+    pins: 10,
+    width: '400px',
+    pinSize: '40px',
+    fontSize: '100%',
+  },
+  normal: {
+    pins: 15,
+    width: '450px',
+    pinSize: '30px',
+    fontSize: '100%',
+  },
+  hard: {
+    pins: 25,
+    width: '450px',
+    pinSize: '18px',
+    fontSize: '80%',
+  },
+};
 
 let config = {
-  levels: {
-    easy: 10,
-    normal: 15,
-    hard: 25
-  },
   level: 'easy',
   mines: 10,
   theme: 'light',
@@ -36,10 +55,11 @@ let config = {
   name: '',
   clicks: 0,
   time: 0,
-  };
+};
 
 getConfig();
 applyConfig();
+createField();
 
 themes.forEach(radio => {
   radio.addEventListener('change', (evt) => {
@@ -53,7 +73,8 @@ themes.forEach(radio => {
 levels.forEach(radio => {
   radio.addEventListener('change', () => {
     config.level = radio.value;
-    levelHeading.textContent = config.levels[config.level] + 'x' + config.levels[config.level];
+    const pins = levelsParam[config.level].pins;
+    levelHeading.textContent = pins + 'x' + pins;
     saveConfig();
   });
 });
@@ -76,6 +97,11 @@ name.addEventListener('input', (evt) => {
   saveConfig();
 });
 
+btnSet.addEventListener('click', () => {
+  removeField();
+  createField();
+});
+
 function saveConfig() {
   localStorage.setItem('config', JSON.stringify(config));
 }
@@ -90,7 +116,8 @@ function applyConfig() {
   levels.forEach(radio => {
     if(radio.value === config.level) {
       radio.checked = true;
-      levelHeading.textContent = config.levels[config.level] + 'x' + config.levels[config.level];
+      const pins = levelsParam[config.level].pins;
+      levelHeading.textContent = pins + 'x' + pins;
     }
   });
   // apply Slider
@@ -115,4 +142,23 @@ function applyConfig() {
   clicks.textContent = config.clicks;
   // apply Time
   time.textContent = config.time;
+}
+
+function removeField() {
+  field.textContent = '';
+}
+
+function createField() {
+  // Resize field
+  field.style.width = levelsParam[config.level].width;
+  // Create pins
+  const pins = levelsParam[config.level].pins;
+  for (let i = 0; i < Math.pow(pins, 2); i++) {
+    const pin = document.createElement('div');
+    pin.className = 'pin';
+    pin.style.fontSize = levelsParam[config.level].fontSize;
+    pin.style.width = levelsParam[config.level].pinSize;
+    pin.style.height = levelsParam[config.level].pinSize;
+    field.append(pin);
+  }
 }
