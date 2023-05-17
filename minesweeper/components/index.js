@@ -55,7 +55,10 @@ let config = {
   name: '',
   clicks: 0,
   time: 0,
+  isMinesSetted: false,
 };
+
+const mines = [];
 
 getConfig();
 applyConfig();
@@ -146,12 +149,16 @@ function applyConfig() {
 
 function removeField() {
   field.textContent = '';
+  config.isMinesSetted = false;
+  saveConfig();
 }
 
 function createField() {
   // Resize field
   field.style.width = levelsParam[config.level].width;
   // Create pins
+  let x = 0;
+  let y = 0;
   const pins = levelsParam[config.level].pins;
   for (let i = 0; i < Math.pow(pins, 2); i++) {
     const pin = document.createElement('div');
@@ -159,6 +166,57 @@ function createField() {
     pin.style.fontSize = levelsParam[config.level].fontSize;
     pin.style.width = levelsParam[config.level].pinSize;
     pin.style.height = levelsParam[config.level].pinSize;
+    pin.setAttribute('data-pin', `${x},${y}`);
     field.append(pin);
+    x++;
+    if (x >= pins) {
+      x = 0;
+      y++;
+    }
   }
 }
+
+field.addEventListener('click', (evt) => {
+  if(evt.target.classList.contains('pin')) {
+    // Get Coordinates
+    const clickedCoordinates = evt.target.getAttribute('data-pin');
+    const clickedIndex = Array.from(evt.target.parentNode.children).indexOf(evt.target);
+    // Set mines
+    if (!config.isMinesSetted) {
+      setMines(clickedIndex);
+      config.isMinesSetted = true;
+      saveConfig();
+    }
+    // Check: is it mine?
+    console.log(clickedCoordinates);
+    if (mines.includes(clickedCoordinates)) console.log(clickedCoordinates + ' - Mine!');
+
+  }
+});
+
+function setMines(clickedIndex) {
+
+  const numOfmines = Number(config.mines);
+  const randomIndexes = new Set();
+  while(randomIndexes.size !== numOfmines) {
+    const randomIndex = Math.floor(Math.random() * 100) + 1;
+    if (clickedIndex !== randomIndex) randomIndexes.add(randomIndex);
+  }
+  console.log(randomIndexes);
+
+  let x = 0;
+  let y = 0;
+  const pins = levelsParam[config.level].pins;
+  for (let i = 0; i < Math.pow(pins, 2); i++) {
+
+    if (Array.from(randomIndexes).includes(i)) mines.push(`${x},${y}`);
+
+    x++;
+    if (x >= pins) {
+      x = 0;
+      y++;
+    }
+  }
+  console.log(mines);
+}
+
