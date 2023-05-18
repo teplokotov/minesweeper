@@ -239,6 +239,7 @@ function clickPin(pin, isByMouse = false) {
 
     if (mines.includes(clickedCoordinates)) {
       pin.textContent = '🔥';
+      openAllMines();
       console.log(clickedCoordinates + ' - Mine!');
       bannerIcon.textContent = message.lose.icon;
       bannerText.textContent = message.lose.text;
@@ -264,6 +265,17 @@ function clickPin(pin, isByMouse = false) {
 
     pin.classList.add('pin__opened');
   }
+}
+
+function openAllMines() {
+  const allPins = document.querySelectorAll('.pin');
+  allPins.forEach(pin => {
+    const coordinate = pin.getAttribute('data-pin');
+    if (mines.includes(coordinate)) {
+      pin.textContent = '🔥';
+      pin.classList.add('pin__opened');
+    }
+  });
 }
 
 function checkPin(x, y) {
