@@ -189,11 +189,11 @@ field.addEventListener('click', (evt) => {
       config.isMinesSetted = true;
       saveConfig();
     }
-    clickPin(evt.target);
+    clickPin(evt.target, true);
   }
 });
 
-function clickPin(pin) {
+function clickPin(pin, isByMouse = false) {
   if(pin !== null) {
     const clickedCoordinates = pin.getAttribute('data-pin');
     const [ x, y ] = clickedCoordinates.split(',');
@@ -205,9 +205,8 @@ function clickPin(pin) {
       console.log(clickedCoordinates + ' - Mine!');
     } else {
 
-      if (counter == null) {
-        checkPin(clickedCoordinates);
-      } else {
+      if (counter !== null) {
+        if (isByMouse) pin.classList.add('pin__opened');
         return;
       }
 
