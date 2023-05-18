@@ -82,6 +82,11 @@ let gameTimer = null;
 let mines = [];
 let numbers = [];
 const colors = ['#006bb1', '#008300', '#d2bd00', '#e86400', '#c10001', '#730001', '#8156c1', '#008f30'];
+let playSoundClick = () => new Audio('./vendor/sounds/click.mp3').play();
+let playSoundSetFlag = () => new Audio('./vendor/sounds/sflag.mp3').play();
+let playSoundRemoveFlag = () => new Audio('./vendor/sounds/rflag.mp3').play();
+let playSoundWin = () => new Audio('./vendor/sounds/win.mp3').play();
+let playSoundBoom = () => new Audio('./vendor/sounds/boom.mp3').play();
 
 getConfig();
 applyConfig();
@@ -236,6 +241,7 @@ field.addEventListener('click', (evt) => {
       config.clicks = config.clicks + 1;
       clicks.textContent = config.clicks;
       saveConfig();
+      playSoundClick();
     }
 
     clickPin(evt.target, true);
@@ -256,12 +262,14 @@ function toggleFlag(pin) {
         config.flags++;
         pin.classList.remove('pin__flag');
         pin.textContent = '';
+        playSoundRemoveFlag();
       }
     } else {
       if (config.flags > 0) {
         config.flags--;
         pin.classList.add('pin__flag');
         pin.textContent = '🚩';
+        playSoundSetFlag();
       }
     }
     saveConfig();
@@ -288,6 +296,7 @@ function clickPin(pin, isByMouse = false) {
       banner.style.opacity = 1;
       config.isFinish = true;
       saveConfig();
+      playSoundBoom();
     } else {
 
       if (counter !== null) {
@@ -340,6 +349,7 @@ function isWin() {
     banner.style.visibility = 'visible';
     banner.style.opacity = 1;
     config.isFinish = true;
+    playSoundWin();
   }
   saveConfig();
 }

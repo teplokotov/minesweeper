@@ -411,7 +411,7 @@ export const drawPage = () => {
   // Section 'score-board' > heading 'Score-board' > table > thead
   const thead = document.createElement('thead');
   thead.className = 'table__heading';
-  thead.innerHTML = '<tr><th>Date</th><th>Name</th><th>Level</th><th>Clicks</th><th>Time</th></tr>';
+  thead.innerHTML = '<tr><th>Result</th><th>Name</th><th>Level</th><th>Clicks</th><th>Time</th></tr>';
   table.append(thead);
 
   // Section 'score-board' > heading 'Score-board' > table > tbody
