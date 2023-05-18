@@ -181,8 +181,7 @@ function createField() {
 
 field.addEventListener('click', (evt) => {
   if(evt.target.classList.contains('pin')) {
-    // Get Coordinates
-    const clickedCoordinates = evt.target.getAttribute('data-pin');
+    // Get Index
     const clickedIndex = Array.from(evt.target.parentNode.children).indexOf(evt.target);
     // Set mines
     if (!config.isMinesSetted) {
@@ -190,12 +189,65 @@ field.addEventListener('click', (evt) => {
       config.isMinesSetted = true;
       saveConfig();
     }
-    // Check: is it mine?
-    //console.log(clickedCoordinates);
-    if (mines.includes(clickedCoordinates)) console.log(clickedCoordinates + ' - Mine!');
-
+    clickPin(evt.target);
   }
 });
+
+function clickPin(pin) {
+  if(pin !== null) {
+    const clickedCoordinates = pin.getAttribute('data-pin');
+    const [ x, y ] = clickedCoordinates.split(',');
+    const counter = pin.getAttribute('data-num');
+
+    if (pin.classList.contains('pin__opened')) return;
+
+    if (mines.includes(clickedCoordinates)) {
+      console.log(clickedCoordinates + ' - Mine!');
+    } else {
+
+      if (counter == null) {
+        checkPin(clickedCoordinates);
+      } else {
+        return;
+      }
+
+      // Set timeout to fix Call Stack overflow
+      // Check neighboring pins recursively
+      setTimeout(() => {
+        checkPin(Number(x), Number(y));
+      }, 5);
+
+    }
+
+    pin.classList.add('pin__opened');
+  }
+}
+
+function checkPin(x, y) {
+
+  const pins = levelsParam[config.level].pins;
+
+  //  x - 1	| x     | x + 1
+  //  y - 1	| y - 1 | y - 1
+  // -----------------------
+  //  x - 1 |   x   | x + 1
+  //  y     |   y   | y
+  // -----------------------
+  //  x - 1	| x     | x + 1
+  //  y + 1	| y + 1 | y + 1
+
+  if (x > 0 && y > 0) clickPin(document.querySelector(`[data-pin="${x - 1},${y - 1}"`));
+  if (y > 0) clickPin(document.querySelector(`[data-pin="${x},${y - 1}"]`));
+  if (y > 0 && x < pins - 1) clickPin(document.querySelector(`[data-pin="${x + 1},${y - 1}"]`));
+
+  if (x > 0) clickPin(document.querySelector(`[data-pin="${x - 1},${y}"`));
+  if (x < pins - 1) clickPin(document.querySelector(`[data-pin="${x + 1},${y}"`));
+
+  if (x > 0 && y < pins - 1) clickPin(document.querySelector(`[data-pin="${x - 1},${y + 1}"`));
+  if (y < pins - 1) clickPin(document.querySelector(`[data-pin="${x},${y + 1}"]`));
+  if (x < pins - 1 && y < pins - 1) clickPin(document.querySelector(`[data-pin="${x + 1},${y + 1}"`));
+
+}
 
 function setMines(clickedIndex) {
 
@@ -206,7 +258,6 @@ function setMines(clickedIndex) {
     const randomIndex = Math.floor(Math.random() * Math.pow(pins, 2));
     if (clickedIndex !== randomIndex) randomIndexes.add(randomIndex);
   }
-  console.log(randomIndexes);
 
   let x = 0;
   let y = 0;
@@ -245,9 +296,9 @@ function setMines(clickedIndex) {
       y++;
     }
   }
-  //console.log(numbers);
+
   numbers.forEach(num => {
-     const [ x, y ] = num.split(',');
+    const [ x, y ] = num.split(',');
       //console.log('x: ' + x + ' y: ' + y );
     if(!mines.includes(`${x},${y}`)) {
       const pin = document.querySelector(`[data-pin="${x},${y}"]`);
@@ -256,9 +307,5 @@ function setMines(clickedIndex) {
       pin.setAttribute('data-num', Number(counter) + 1);
       pin.textContent = Number(pin.textContent) + 1;
      }
-  //   // let dataNum = parseInt(tile.getAttribute('data-num'));
-  //   // if (!dataNum) dataNum = 0;
-  //   // pin.setAttribute('data-num', dataNum + 1);
 	});
 }
-
