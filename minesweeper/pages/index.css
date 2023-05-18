@@ -89,7 +89,8 @@
 .form__heading,
 .score-board__heading,
 .score__heading,
-.time__heading {
+.time__heading,
+.flags__heading {
   display: flex;
   margin: 0;
   padding: 20px 5px 10px 5px;
@@ -175,23 +176,29 @@
 }
 
 .dashboard__score {
-  width: 50%;
+  width: calc(100% / 3);
 }
 
 .dashboard__time {
-  width: 50%;
+  width: calc(100% / 3);
+}
+
+.dashboard__flags {
+  width: calc(100% / 3);
 }
 
 .score,
-.time {
+.time,
+.flags {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
 }
 
-.score_view,
-.time_view {
+.score__view,
+.time__view,
+.flags__view {
   margin: 0;
   padding: 10px;
   border-radius: 10px;
@@ -202,7 +209,8 @@
 }
 
 .score__heading,
-.time__heading {
+.time__heading,
+.flags__heading {
   padding-top: 10px;
 }
 

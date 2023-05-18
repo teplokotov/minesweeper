@@ -327,14 +327,31 @@ export const drawPage = () => {
 
   // Section 'right-side' > div 'dashboard__score' > p
   const score = document.createElement('p');
-  score.className = 'score_view';
+  score.className = 'score__view';
   score.textContent = '0';
   scoreHeading.after(score);
+
+  // Section 'right-side' > div 'dashboard__flags'
+  const dashboardFlags = document.createElement('div');
+  dashboardFlags.className = 'dashboard__flags flags';
+  dashboardScore.after(dashboardFlags);
+
+  // Section 'right-side' > div 'dashboard__flags' > heading
+  const flagsHeading = document.createElement('h2');
+  flagsHeading.className = 'flags__heading';
+  flagsHeading.textContent = '🚩 Flags';
+  dashboardFlags.append(flagsHeading);
+
+  // Section 'right-side' > div 'dashboard__flags' > p
+  const flags = document.createElement('p');
+  flags.className = 'flags__view';
+  flags.textContent = '0';
+  flagsHeading.after(flags);
 
   // Section 'right-side' > div 'dashboard__time'
   const dashboardTime = document.createElement('div');
   dashboardTime.className = 'dashboard__time time';
-  dashboardScore.after(dashboardTime);
+  dashboardFlags.after(dashboardTime);
 
   // Section 'right-side' > div 'dashboard__time' > heading
   const timeHeading = document.createElement('h2');
@@ -344,7 +361,7 @@ export const drawPage = () => {
 
   // Section 'right-side' > div 'dashboard__time' > p
   const time = document.createElement('p');
-  time.className = 'time_view';
+  time.className = 'time__view';
   time.textContent = '0';
   timeHeading.after(time);
 

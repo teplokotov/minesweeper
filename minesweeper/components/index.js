@@ -18,9 +18,9 @@ const sounds = document.querySelectorAll('.form__sounds');
 // Name
 const name = document.querySelector('#userName');
 // Clicks
-const clicks = document.querySelector('.score_view');
+const clicks = document.querySelector('.score__view');
 // Time
-const time = document.querySelector('.time_view');
+const time = document.querySelector('.time__view');
 // Field
 const field = document.querySelector('.field');
 // Button 'New Game'
