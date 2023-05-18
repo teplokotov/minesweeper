@@ -77,6 +77,7 @@ let config = {
   isWin: false,
 };
 
+let gameTimer = null;
 let mines = [];
 let numbers = [];
 const colors = ['#006bb1', '#008300', '#d2bd00', '#e86400', '#c10001', '#730001', '#8156c1', '#008f30'];
@@ -169,6 +170,7 @@ function applyConfig() {
 }
 
 function removeField() {
+  setTimer('stop');
   mines = [];
   numbers = [];
 
@@ -176,10 +178,12 @@ function removeField() {
   config.flags = config.mines;
   flags.textContent = '';
   clicks.textContent = 0;
+  time.textContent = 0;
   field.textContent = '';
   config.isMinesSetted = false;
   config.isFinish = false;
   config.isWin = false;
+  config.time = 0;
   saveConfig();
 
   banner.style.opacity = 0;
@@ -219,6 +223,7 @@ field.addEventListener('click', (evt) => {
     const clickedIndex = Array.from(evt.target.parentNode.children).indexOf(evt.target);
     // Set mines
     if (!config.isMinesSetted) {
+      setTimer('start');
       setMines(clickedIndex);
       config.isMinesSetted = true;
       saveConfig();
@@ -243,6 +248,7 @@ function clickPin(pin, isByMouse = false) {
     if (pin.classList.contains('pin__opened')) return;
 
     if (mines.includes(clickedCoordinates)) {
+      setTimer('stop');
       pin.textContent = '🔥';
       openAllMines();
       console.log(clickedCoordinates + ' - Mine!');
@@ -294,6 +300,7 @@ function isWin() {
     if (!pin.classList.contains('pin__opened') && !mines.includes(coordinate)) config.isWin = false;
   });
   if (config.isWin) {
+    setTimer('stop');
     bannerIcon.textContent = message.win.icon;
     let textResult = message.win.text.replace('N', config.clicks).replace('#', config.time);
     if (config.time <= 1) textResult = textResult.replace('seconds', 'second');
@@ -394,4 +401,17 @@ function setMines(clickedIndex) {
       pin.textContent = Number(counter) + 1;
      }
 	});
+}
+
+function setTimer(action) {
+  if (action === 'start') {
+    gameTimer = setInterval(() => {
+      config.time++;
+      time.textContent = config.time;
+      saveConfig();
+    }, 1000);
+  }
+  if (action === 'stop') {
+    clearInterval(gameTimer);
+  }
 }
