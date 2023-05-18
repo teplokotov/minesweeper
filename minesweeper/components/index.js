@@ -21,6 +21,8 @@ const name = document.querySelector('#userName');
 const clicks = document.querySelector('.score__view');
 // Time
 const time = document.querySelector('.time__view');
+// Flags
+const flags = document.querySelector('.flags__view');
 // Field
 const field = document.querySelector('.field');
 // Button 'New Game'
@@ -55,6 +57,7 @@ let config = {
   name: '',
   clicks: 0,
   time: 0,
+  flags: 10,
   isMinesSetted: false,
 };
 
@@ -152,12 +155,20 @@ function applyConfig() {
 function removeField() {
   mines = [];
   numbers = [];
+  config.clicks = 0;
+  config.flags = config.mines;
+  flags.textContent = '';
+  clicks.textContent = 0;
   field.textContent = '';
   config.isMinesSetted = false;
   saveConfig();
 }
 
 function createField() {
+  // Set initial flags
+  flags.textContent = config.mines;
+  config.flags = config.mines;
+  saveConfig();
   // Resize field
   field.style.width = levelsParam[config.level].width;
   // Create pins
@@ -190,6 +201,10 @@ field.addEventListener('click', (evt) => {
       config.isMinesSetted = true;
       saveConfig();
     }
+    // Update clicks
+    config.clicks = config.clicks + 1;
+    clicks.textContent = config.clicks;
+    saveConfig();
     clickPin(evt.target, true);
   }
 });
@@ -303,7 +318,6 @@ function setMines(clickedIndex) {
 
   numbers.forEach(num => {
     const [ x, y ] = num.split(',');
-      //console.log('x: ' + x + ' y: ' + y );
     if(!mines.includes(`${x},${y}`)) {
       const pin = document.querySelector(`[data-pin="${x},${y}"]`);
       let counter = pin.getAttribute('data-num');
