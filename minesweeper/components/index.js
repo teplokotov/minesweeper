@@ -60,6 +60,7 @@ let config = {
 
 let mines = [];
 let numbers = [];
+const colors = ['#006bb1', '#008300', '#d2bd00', '#e86400', '#c10001', '#730001', '#8156c1', '#008f30'];
 
 getConfig();
 applyConfig();
@@ -202,11 +203,15 @@ function clickPin(pin, isByMouse = false) {
     if (pin.classList.contains('pin__opened')) return;
 
     if (mines.includes(clickedCoordinates)) {
+      pin.textContent = '🔥';
       console.log(clickedCoordinates + ' - Mine!');
     } else {
 
       if (counter !== null) {
-        if (isByMouse) pin.classList.add('pin__opened');
+        if (isByMouse) {
+          pin.classList.add('pin__opened');
+          pin.textContent = counter;
+        }
         return;
       }
 
@@ -266,7 +271,7 @@ function setMines(clickedIndex) {
     if (Array.from(randomIndexes).includes(i)) {
       mines.push(`${x},${y}`);
       const pin = document.querySelector(`[data-pin="${x},${y}"]`);
-      pin.textContent = '🔥';
+      //pin.textContent = '🔥';
 
       //  x - 1	| x     | x + 1
       //  y - 1	| y - 1 | y - 1
@@ -304,7 +309,7 @@ function setMines(clickedIndex) {
       let counter = pin.getAttribute('data-num');
       if (!counter) counter = 0;
       pin.setAttribute('data-num', Number(counter) + 1);
-      pin.textContent = Number(pin.textContent) + 1;
+      pin.style.color = colors[Number(counter)];
      }
 	});
 }
