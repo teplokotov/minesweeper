@@ -73,6 +73,8 @@ let config = {
   time: 0,
   flags: 10,
   isMinesSetted: false,
+  isFinish: false,
+  isWin: false,
 };
 
 let mines = [];
@@ -176,12 +178,12 @@ function removeField() {
   clicks.textContent = 0;
   field.textContent = '';
   config.isMinesSetted = false;
+  config.isFinish = false;
+  config.isWin = false;
   saveConfig();
 
-  bannerIcon.textContent = '';
-  bannerText.textContent = '';
-  banner.style.visibility = 'hidden';
   banner.style.opacity = 0;
+  banner.style.visibility = 'hidden';
 }
 
 function createField() {
@@ -212,7 +214,7 @@ function createField() {
 }
 
 field.addEventListener('click', (evt) => {
-  if(evt.target.classList.contains('pin')) {
+  if(evt.target.classList.contains('pin') && config.isFinish === false ) {
     // Get Index
     const clickedIndex = Array.from(evt.target.parentNode.children).indexOf(evt.target);
     // Set mines
@@ -245,6 +247,8 @@ function clickPin(pin, isByMouse = false) {
       bannerText.textContent = message.lose.text;
       banner.style.visibility = 'visible';
       banner.style.opacity = 1;
+      config.isFinish = true;
+      saveConfig();
     } else {
 
       if (counter !== null) {
@@ -252,6 +256,7 @@ function clickPin(pin, isByMouse = false) {
           pin.classList.add('pin__opened');
           pin.textContent = counter;
         }
+        isWin();
         return;
       }
 
@@ -276,6 +281,27 @@ function openAllMines() {
       pin.classList.add('pin__opened');
     }
   });
+}
+
+function isWin() {
+  const allPins = document.querySelectorAll('.pin');
+  config.isWin = true;
+  allPins.forEach(pin => {
+    const coordinate = pin.getAttribute('data-pin');
+    if (!pin.classList.contains('pin__opened') && !mines.includes(coordinate)) config.isWin = false;
+  });
+  if (config.isWin) {
+    bannerIcon.textContent = message.win.icon;
+    let textResult = message.win.text.replace('N', config.clicks).replace('#', config.time);
+    if (config.time <= 1) textResult = textResult.replace('seconds', 'second');
+    if (config.clicks === 1) textResult = textResult.replace('moves', 'move');
+    bannerText.textContent = textResult;
+
+    banner.style.visibility = 'visible';
+    banner.style.opacity = 1;
+    config.isFinish = true;
+  }
+  saveConfig();
 }
 
 function checkPin(x, y) {
@@ -322,7 +348,8 @@ function setMines(clickedIndex) {
     if (Array.from(randomIndexes).includes(i)) {
       mines.push(`${x},${y}`);
       const pin = document.querySelector(`[data-pin="${x},${y}"]`);
-      //pin.textContent = '🔥';
+      // For test
+      pin.textContent = '🔥';
 
       //  x - 1	| x     | x + 1
       //  y - 1	| y - 1 | y - 1
@@ -360,6 +387,8 @@ function setMines(clickedIndex) {
       if (!counter) counter = 0;
       pin.setAttribute('data-num', Number(counter) + 1);
       pin.style.color = colors[Number(counter)];
+      // For test
+      pin.textContent = Number(counter) + 1;
      }
 	});
 }

@@ -299,6 +299,7 @@
   align-items: center;
   justify-content: center;
   max-width: 350px;
+  cursor: default;
   visibility: hidden;
   opacity: 0;
   transition: opacity .3s,visibility .3s linear;
