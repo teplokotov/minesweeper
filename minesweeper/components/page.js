@@ -376,6 +376,21 @@ export const drawPage = () => {
   field.className = 'field';
   fieldWrapper.append(field);
 
+  // Section 'right-side' > section 'field-wrapper' > div 'banner'
+  const banner = document.createElement('div');
+  banner.className = 'banner';
+  fieldWrapper.append(banner);
+
+  // Section 'right-side' > section 'field-wrapper' > div 'banner' > p 'icon'
+  const bannerIcon = document.createElement('p');
+  bannerIcon.className = 'banner__icon';
+  banner.append(bannerIcon);
+
+  // Section 'right-side' > section 'field-wrapper' > div 'banner' > p 'text'
+  const bannerText = document.createElement('p');
+  bannerText.className = 'banner__text';
+  bannerIcon.after(bannerText);
+
   // Section 'score-board'
   const scoreBoard = document.createElement('section');
   scoreBoard.className = 'score-board';

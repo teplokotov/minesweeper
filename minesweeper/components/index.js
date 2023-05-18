@@ -27,6 +27,20 @@ const flags = document.querySelector('.flags__view');
 const field = document.querySelector('.field');
 // Button 'New Game'
 const btnSet = document.querySelector('.btn-set');
+// Banner
+const banner = document.querySelector('.banner');
+const bannerIcon = document.querySelector('.banner__icon');
+const bannerText = document.querySelector('.banner__text');
+const message = {
+  lose: {
+    icon: '🔥',
+    text: 'Game over. Try again',
+  },
+  win: {
+    icon: '🎉',
+    text: 'Hooray! You found all mines in # seconds and N moves!',
+  }
+};
 
 const levelsParam = {
   easy: {
@@ -155,6 +169,7 @@ function applyConfig() {
 function removeField() {
   mines = [];
   numbers = [];
+
   config.clicks = 0;
   config.flags = config.mines;
   flags.textContent = '';
@@ -162,6 +177,11 @@ function removeField() {
   field.textContent = '';
   config.isMinesSetted = false;
   saveConfig();
+
+  bannerIcon.textContent = '';
+  bannerText.textContent = '';
+  banner.style.visibility = 'hidden';
+  banner.style.opacity = 0;
 }
 
 function createField() {
@@ -220,6 +240,10 @@ function clickPin(pin, isByMouse = false) {
     if (mines.includes(clickedCoordinates)) {
       pin.textContent = '🔥';
       console.log(clickedCoordinates + ' - Mine!');
+      bannerIcon.textContent = message.lose.icon;
+      bannerText.textContent = message.lose.text;
+      banner.style.visibility = 'visible';
+      banner.style.opacity = 1;
     } else {
 
       if (counter !== null) {

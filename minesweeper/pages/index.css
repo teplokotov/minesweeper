@@ -289,6 +289,34 @@
   padding: 10px;
   background-color: var(--color-ultra-accent);
   border-radius: 10px;
+  position: relative;
+}
+
+.banner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 350px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .3s,visibility .3s linear;
+}
+
+.banner__icon {
+  margin: 0;
+  font-size: 200px;
+}
+
+.banner__text {
+  margin: 10px 0 0 0;
+  padding: 10px;
+  background-color: #171616a6;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
 }
 
 .pin {
