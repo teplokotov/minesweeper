@@ -74,6 +74,7 @@ let config = {
   flags: 10,
   isMinesSetted: false,
   isFinish: false,
+  isStart: false,
   isWin: false,
 };
 
@@ -175,13 +176,14 @@ function removeField() {
   numbers = [];
 
   config.clicks = 0;
-  config.flags = config.mines;
+  config.flags = Number(config.mines);
   flags.textContent = '';
   clicks.textContent = 0;
   time.textContent = 0;
   field.textContent = '';
   config.isMinesSetted = false;
   config.isFinish = false;
+  config.isStart = false;
   config.isWin = false;
   config.time = 0;
   saveConfig();
@@ -193,7 +195,7 @@ function removeField() {
 function createField() {
   // Set initial flags
   flags.textContent = config.mines;
-  config.flags = config.mines;
+  config.flags = Number(config.mines);
   saveConfig();
   // Resize field
   field.style.width = levelsParam[config.level].width;
@@ -226,6 +228,7 @@ field.addEventListener('click', (evt) => {
       setTimer('start');
       setMines(clickedIndex);
       config.isMinesSetted = true;
+      config.isStart = true;
       saveConfig();
     }
     // Update clicks
@@ -238,6 +241,33 @@ field.addEventListener('click', (evt) => {
     clickPin(evt.target, true);
   }
 });
+
+field.addEventListener('contextmenu', (evt) => {
+  if(evt.target.classList.contains('pin') && config.isFinish === false ) {
+    evt.preventDefault();
+    toggleFlag(evt.target);
+  }
+});
+
+function toggleFlag(pin) {
+  if(!pin.classList.contains('pin__opened') && config.isStart) {
+    if (pin.classList.contains('pin__flag')) {
+      if (config.flags <= config.mines) {
+        config.flags++;
+        pin.classList.remove('pin__flag');
+        pin.textContent = '';
+      }
+    } else {
+      if (config.flags > 0) {
+        config.flags--;
+        pin.classList.add('pin__flag');
+        pin.textContent = '🚩';
+      }
+    }
+    saveConfig();
+    flags.textContent = config.flags;
+  }
+}
 
 function clickPin(pin, isByMouse = false) {
   if(pin !== null) {
