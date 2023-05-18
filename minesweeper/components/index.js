@@ -224,9 +224,12 @@ field.addEventListener('click', (evt) => {
       saveConfig();
     }
     // Update clicks
-    config.clicks = config.clicks + 1;
-    clicks.textContent = config.clicks;
-    saveConfig();
+    if (!evt.target.classList.contains('pin__opened')) {
+      config.clicks = config.clicks + 1;
+      clicks.textContent = config.clicks;
+      saveConfig();
+    }
+
     clickPin(evt.target, true);
   }
 });
