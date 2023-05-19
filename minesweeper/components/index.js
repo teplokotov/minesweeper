@@ -24,15 +24,16 @@ const time = document.querySelector('.time__view');
 // Flags
 const flags = document.querySelector('.flags__view');
 // Field
-const field = document.querySelector('.field');
+let field = document.querySelector('.field');
+const fieldWrapper = document.querySelector('.field-wrapper');
 // tbody
 const tbody = document.querySelector('tbody');
 // Button 'New Game'
 const btnSet = document.querySelector('.btn-set');
 // Banner
-const banner = document.querySelector('.banner');
-const bannerIcon = document.querySelector('.banner__icon');
-const bannerText = document.querySelector('.banner__text');
+let banner = document.querySelector('.banner');
+let bannerIcon = document.querySelector('.banner__icon');
+let bannerText = document.querySelector('.banner__text');
 const message = {
   lose: {
     icon: '🔥',
@@ -68,6 +69,7 @@ const levelsParam = {
 let config = {
   level: 'easy',
   mines: 10,
+  minesArr : [],
   theme: 'light',
   sounds: 'on',
   name: '',
@@ -81,6 +83,8 @@ let config = {
 };
 
 let latestResults = [];
+let gameSession = {};
+let isFirstClick = true;
 
 let gameTimer = null;
 let mines = [];
@@ -94,8 +98,17 @@ let playSoundBoom = () => new Audio('./vendor/sounds/boom.mp3').play();
 
 getConfig();
 applyConfig();
-createField();
 getResults();
+if (config.isStart) {
+  getGameSession();
+  field = document.querySelector('.field');
+  banner = document.querySelector('.banner');
+  bannerIcon = document.querySelector('.banner__icon');
+  bannerText = document.querySelector('.banner__text');
+  mines = config.minesArr;
+} else {
+  createField();
+}
 
 themes.forEach(radio => {
   radio.addEventListener('change', (evt) => {
@@ -176,6 +189,8 @@ function applyConfig() {
   name.value = config.name;
   // apply Clicks
   clicks.textContent = config.clicks;
+  // apply flags
+  flags.textContent = config.flags;
   // apply Time
   time.textContent = config.time;
 }
@@ -187,7 +202,7 @@ function removeField() {
 
   config.clicks = 0;
   config.flags = Number(config.mines);
-  flags.textContent = '';
+  flags.textContent = 0;
   clicks.textContent = 0;
   time.textContent = 0;
   field.textContent = '';
@@ -241,6 +256,10 @@ field.addEventListener('click', (evt) => {
       config.isStart = true;
       saveConfig();
     }
+    if (config.isStart && isFirstClick) {
+      setTimer('start');
+      isFirstClick = false;
+    }
     // Update clicks
     if (!evt.target.classList.contains('pin__opened')) {
       config.clicks = config.clicks + 1;
@@ -250,6 +269,7 @@ field.addEventListener('click', (evt) => {
     }
 
     clickPin(evt.target, true);
+    saveGameSession();
   }
 });
 
@@ -257,6 +277,7 @@ field.addEventListener('contextmenu', (evt) => {
   if(evt.target.classList.contains('pin') && config.isFinish === false ) {
     evt.preventDefault();
     toggleFlag(evt.target);
+    saveGameSession();
   }
 });
 
@@ -323,6 +344,7 @@ function clickPin(pin, isByMouse = false) {
     }
 
     pin.classList.add('pin__opened');
+    saveGameSession();
   }
 }
 
@@ -406,7 +428,7 @@ function setMines(clickedIndex) {
       mines.push(`${x},${y}`);
       const pin = document.querySelector(`[data-pin="${x},${y}"]`);
       // For test
-      pin.textContent = '🔥';
+      // pin.textContent = '🔥';
 
       //  x - 1	| x     | x + 1
       //  y - 1	| y - 1 | y - 1
@@ -436,6 +458,9 @@ function setMines(clickedIndex) {
     }
   }
 
+  config.minesArr = mines;
+  saveConfig();
+
   numbers.forEach(num => {
     const [ x, y ] = num.split(',');
     if(!mines.includes(`${x},${y}`)) {
@@ -445,7 +470,7 @@ function setMines(clickedIndex) {
       pin.setAttribute('data-num', Number(counter) + 1);
       pin.style.color = colors[Number(counter)];
       // For test
-      pin.textContent = Number(counter) + 1;
+      // pin.textContent = Number(counter) + 1;
      }
 	});
 }
@@ -494,4 +519,15 @@ function getResults() {
     latestResults = resultsFromStorage;
     drawTable();
   }
+}
+
+function saveGameSession() {
+  const fieldWrapperAsString = fieldWrapper.innerHTML;
+  gameSession = { fieldWrapperAsString };
+  localStorage.setItem('gameSession', JSON.stringify(gameSession));
+}
+
+function getGameSession() {
+  const gameSessionFromStorage = JSON.parse(localStorage.getItem('gameSession'));
+  fieldWrapper.innerHTML = gameSessionFromStorage.fieldWrapperAsString;
 }
