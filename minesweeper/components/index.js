@@ -241,7 +241,7 @@ field.addEventListener('click', (evt) => {
       config.clicks = config.clicks + 1;
       clicks.textContent = config.clicks;
       saveConfig();
-      playSoundClick();
+      if(config.sounds === 'on') playSoundClick();
     }
 
     clickPin(evt.target, true);
@@ -262,14 +262,14 @@ function toggleFlag(pin) {
         config.flags++;
         pin.classList.remove('pin__flag');
         pin.textContent = '';
-        playSoundRemoveFlag();
+        if(config.sounds === 'on') playSoundRemoveFlag();
       }
     } else {
       if (config.flags > 0) {
         config.flags--;
         pin.classList.add('pin__flag');
         pin.textContent = '🚩';
-        playSoundSetFlag();
+        if(config.sounds === 'on') playSoundSetFlag();
       }
     }
     saveConfig();
@@ -296,7 +296,7 @@ function clickPin(pin, isByMouse = false) {
       banner.style.opacity = 1;
       config.isFinish = true;
       saveConfig();
-      playSoundBoom();
+      if(config.sounds === 'on') playSoundBoom();
     } else {
 
       if (counter !== null) {
@@ -349,7 +349,7 @@ function isWin() {
     banner.style.visibility = 'visible';
     banner.style.opacity = 1;
     config.isFinish = true;
-    playSoundWin();
+    if(config.sounds === 'on') playSoundWin();
   }
   saveConfig();
 }
