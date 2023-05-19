@@ -23,7 +23,6 @@
 .body {
   background-color: var(--color-primary);
   font-family: Inter, Arial, sans-serif;
-  min-width: 500px;
 }
 
 .page {
