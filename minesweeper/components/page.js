@@ -411,12 +411,18 @@ export const drawPage = () => {
   // Section 'score-board' > heading 'Score-board' > table > thead
   const thead = document.createElement('thead');
   thead.className = 'table__heading';
-  thead.innerHTML = '<tr><th>Result</th><th>Name</th><th>Level</th><th>Clicks</th><th>Time</th></tr>';
+  thead.innerHTML = '<tr><th>Result</th><th>Name</th><th>Level</th><th>Mines</th><th>Clicks</th><th>Time</th></tr>';
   table.append(thead);
 
   // Section 'score-board' > heading 'Score-board' > table > tbody
   const tbody = document.createElement('tbody');
   thead.after(tbody);
+
+  // Section 'score-board' > heading 'Score-board' > table > tbody > tr
+  const tr = document.createElement('tr');
+  tr.className = 'table__row row';
+  tr.innerHTML = '<td colspan="6" class="row__empty">The table is empty. Be the first!</td>';
+  tbody.append(tr);
 
   // Footer
   const footer = document.createElement('footer');

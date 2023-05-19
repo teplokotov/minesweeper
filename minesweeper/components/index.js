@@ -25,6 +25,8 @@ const time = document.querySelector('.time__view');
 const flags = document.querySelector('.flags__view');
 // Field
 const field = document.querySelector('.field');
+// tbody
+const tbody = document.querySelector('tbody');
 // Button 'New Game'
 const btnSet = document.querySelector('.btn-set');
 // Banner
@@ -78,6 +80,8 @@ let config = {
   isWin: false,
 };
 
+let latestResults = [];
+
 let gameTimer = null;
 let mines = [];
 let numbers = [];
@@ -91,6 +95,7 @@ let playSoundBoom = () => new Audio('./vendor/sounds/boom.mp3').play();
 getConfig();
 applyConfig();
 createField();
+getResults();
 
 themes.forEach(radio => {
   radio.addEventListener('change', (evt) => {
@@ -297,6 +302,7 @@ function clickPin(pin, isByMouse = false) {
       config.isFinish = true;
       saveConfig();
       if(config.sounds === 'on') playSoundBoom();
+      insertResult('🔥', config.name, config.level, config.mines, config.clicks, config.time);
     } else {
 
       if (counter !== null) {
@@ -350,6 +356,7 @@ function isWin() {
     banner.style.opacity = 1;
     config.isFinish = true;
     if(config.sounds === 'on') playSoundWin();
+    insertResult('🏆', config.name, config.level, config.mines, config.clicks, config.time);
   }
   saveConfig();
 }
@@ -453,5 +460,38 @@ function setTimer(action) {
   }
   if (action === 'stop') {
     clearInterval(gameTimer);
+  }
+}
+
+function drawTable() {
+  if (latestResults.length > 0) {
+    tbody.textContent = '';
+    latestResults.forEach((row) => {
+      const tr = document.createElement('tr');
+      tr.className = 'table__row row';
+      tr.innerHTML = `<td class="row__result">${row[0]}</td><td class="row__name">${row[1]}</td><td class="row__level">${row[2]}</td><td class="row__mines">${row[3]}</td><td class="row__clicks">${row[4]}</td><td class="row__time">${row[5]}s</td>`;
+      tbody.append(tr);
+    });
+  }
+}
+
+function insertResult(result, name, level, mines, score, time) {
+  if (latestResults.length >= 10) latestResults.pop();
+  const userName = name ? name : 'Anonymous';
+  const beatyLevel = level.replace('e','E').replace('n','N').replace('h','H');
+  latestResults.unshift([result, userName, beatyLevel, mines, score, time]);
+  drawTable();
+  saveResults();
+}
+
+function saveResults() {
+  localStorage.setItem('results', JSON.stringify(latestResults));
+}
+
+function getResults() {
+  const resultsFromStorage = JSON.parse(localStorage.getItem('results'));
+  if (resultsFromStorage) {
+    latestResults = resultsFromStorage;
+    drawTable();
   }
 }
