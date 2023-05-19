@@ -1,6 +1,3 @@
-// Styles
-// import '../pages/index.css';
-
 import { drawPage, body } from "../components/page.js";
 
 drawPage();
@@ -196,6 +193,7 @@ function applyConfig() {
 }
 
 function removeField() {
+  isFirstClick = true;
   setTimer('stop');
   mines = [];
   numbers = [];
@@ -257,6 +255,7 @@ field.addEventListener('click', (evt) => {
       saveConfig();
     }
     if (config.isStart && isFirstClick) {
+      setTimer('stop');
       setTimer('start');
       isFirstClick = false;
     }
