@@ -308,7 +308,7 @@ function clickPin(pin, isByMouse = false) {
     const [ x, y ] = clickedCoordinates.split(',');
     const counter = pin.getAttribute('data-num');
 
-    if (pin.classList.contains('pin__opened')) return;
+    if (pin.classList.contains('pin__opened') || pin.classList.contains('pin__flag')) return;
 
     if (mines.includes(clickedCoordinates)) {
       setTimer('stop');
